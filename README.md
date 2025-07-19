@@ -35,13 +35,15 @@ API sử dụng thư viện [google-play-scraper](https://github.com/facundoolan
 
 
 Ví dụ:
+```sh
 GET https://<your-vercel-domain>/api?term=facebook&country=vn&limit=5
 Headers:
   x-api-key: <your-api-key>
-
+```
 
 ### 3. Response
 
+```json
 {
   "data": [
     {
@@ -53,6 +55,7 @@ Headers:
     ...
   ]
 }
+```
 
 ## Công nghệ sử dụng
 * [Node.js 20.x](https://nodejs.org/)
