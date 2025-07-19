@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+
+# Local env files (do not commit secrets!)
+.env
+
+# Vercel CLI output
+.vercel/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
