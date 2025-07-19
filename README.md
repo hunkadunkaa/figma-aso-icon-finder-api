@@ -52,7 +52,6 @@ Headers:
       "icon": "https://play-lh.googleusercontent.com/...",
       "developer": "Meta Platforms, Inc."
     },
-    ...
   ]
 }
 ```
