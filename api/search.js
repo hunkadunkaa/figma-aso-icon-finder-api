@@ -1,5 +1,3 @@
-// /api/search.js
-
 const VALID_API_KEY = process.env.FIGMA_PLUGIN_API_KEY;
 
 function normalize(str = "") {
@@ -21,14 +19,12 @@ function isSameApp(g, a) {
   const devClose =
     gDev && aDev ? (gDev === aDev || gDev.includes(aDev) || aDev.includes(gDev)) : false;
 
-  // bạn có thể nới lỏng nếu cần
   return titleClose && devClose;
 }
 
 function mergeResults(googleArr = [], appstoreArr = []) {
   const merged = [];
 
-  // ưu tiên google trước
   for (const g of googleArr) {
     merged.push({
       appId: g.appId,
@@ -46,7 +42,6 @@ function mergeResults(googleArr = [], appstoreArr = []) {
     if (found) {
       found.stores.appStore =
         a.stores?.appStore || { appId: a.appId || a.id || a.bundleId };
-      // nếu google không có icon thì mượn icon app store
       if (!found.icon && a.icon) {
         found.icon = a.icon;
       }
@@ -67,7 +62,6 @@ function mergeResults(googleArr = [], appstoreArr = []) {
 }
 
 module.exports = async (req, res) => {
-  // CORS trước
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-api-key");
@@ -77,10 +71,11 @@ module.exports = async (req, res) => {
     return res.end();
   }
 
-  // check key
   const apiKey = Array.isArray(req.headers["x-api-key"])
     ? req.headers["x-api-key"][0]
     : req.headers["x-api-key"];
+  
+  console.log("Received API Key:", apiKey);
 
   if (apiKey !== VALID_API_KEY) {
     res.statusCode = 401;
