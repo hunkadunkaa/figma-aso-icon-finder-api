@@ -1,3 +1,9 @@
+/**
+ * Vercel serverless API route
+ * @param {import('http').IncomingMessage} req
+ * @param {import('http').ServerResponse} res
+ */
+
 const VALID_API_KEY = process.env.FIGMA_PLUGIN_API_KEY;
 
 function normalize(str = "") {
