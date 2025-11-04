@@ -68,25 +68,18 @@ function mergeResults(googleArr = [], appstoreArr = []) {
 }
 
 module.exports = async (req, res) => {
-
-  console.log("🔵 incoming:", req.method, req.url);
-
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-api-key");
 
   if (req.method === "OPTIONS") {
     console.log("🟣 OPTIONS headers:", req.headers);
-    res.statusCode = 200;
     return res.end();
   }
 
   const apiKey = Array.isArray(req.headers["x-api-key"])
     ? req.headers["x-api-key"][0]
     : req.headers["x-api-key"];
-  
-  console.log("🟡 client sent x-api-key:", apiKey);
-  console.log("🟡 server env FIGMA_PLUGIN_API_KEY:", VALID_API_KEY);
 
   if (apiKey !== VALID_API_KEY) {
     res.statusCode = 401;
