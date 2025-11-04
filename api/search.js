@@ -73,7 +73,6 @@ module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-api-key");
 
   if (req.method === "OPTIONS") {
-    console.log("🟣 OPTIONS headers:", req.headers);
     return res.end();
   }
 

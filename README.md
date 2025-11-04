@@ -1,16 +1,18 @@
-# gplay-figma-icon-finder-api
+# Figma ASO Icon Finder API
 
 ## Giới thiệu
 
-Repo serverless API sử dụng cho plugin [gplay-figma-icon-finder](https://github.com/hunkadunkaa/gplay-figma-icon-finder) được triển khai trên nền tảng [Vercel](https://vercel.com/) và dùng để giao tiếp giữa plugin Figma và Google Play Store, giúp lấy thông tin icon ứng dụng một cách tự động.
+Serverless API sử dụng cho plugin [figma-aso-icon-finder](https://github.com/hunkadunkaa/figma-aso-icon-finder) được triển khai trên [Vercel](https://vercel.com/) dùng để giao tiếp giữa plugin **Figma** với **Google Play Store** và **Apple App Store**, giúp lấy thông tin icon ứng dụng và import vào trong **Figma**.
 
-API sử dụng thư viện [google-play-scraper](https://github.com/facundoolano/google-play-scraper) để truy vấn và lấy dữ liệu icon, tên ứng dụng, nhà phát triển từ Google Play Store.
+![Hình mẫu plugin](./img/example.png)
+
+API sử dụng thư viện [google-play-scraper](https://github.com/facundoolano/google-play-scraper) và [app-store-scraper](https://github.com/facundoolano/app-store-scraper) để truy vấn và lấy dữ liệu icon, tên ứng dụng, nhà phát triển từ Google Play Store và Apple App Store.
 
 ## Tính năng
 
-- Nhận request từ plugin Figma (hoặc client khác) để tìm kiếm ứng dụng trên Google Play Store.
+- Nhận request từ plugin Figma để tìm kiếm ứng dụng trên các store (fixed: 250 kết quả từ cả 2 store).
 - Trả về danh sách ứng dụng phù hợp với từ khóa, bao gồm: appId, tên, icon, tên nhà phát triển.
-- Hỗ trợ giới hạn số lượng kết quả và chọn quốc gia tìm kiếm.
+- Phát hiện và hợp nhất các thông tin trùng lặp trên cả 2 store (app giống nhau cùng xuất hiện trên cả 2 store, sẽ ưu tiên kết quả trên Google Play Store nếu trùng).
 
 ## Cách sử dụng
 
@@ -24,19 +26,19 @@ API sử dụng thư viện [google-play-scraper](https://github.com/facundoolan
   vercel --prod
 
 ### 2. Gọi API
-* Endpoint: `https://<your-vercel-domain>/api`
+* Endpoint: `https://<your-vercel-domain>/api/search`
 * Method: `GET`
 * Header:
-    * `x-api-key`: API Key bạn đã cấu hình
+    * `x-api-key`: API Key đã cấu hình
 * Query params:
     * `term`: Từ khóa tìm kiếm (bắt buộc)
     * `country`: Mã quốc gia (mặc định: us)
-    * `limit`: Số lượng kết quả (mặc định: 5)
+    * `store`: App store tìm kiếm ('all' | 'google' | 'appstore')
 
 
 Ví dụ:
 ```sh
-GET https://<your-vercel-domain>/api?term=facebook&country=vn&limit=5
+GET https://<your-vercel-domain>/api/search?term=facebook&country=vn&store=all
 Headers:
   x-api-key: <your-api-key>
 ```
@@ -48,9 +50,20 @@ Headers:
   "data": [
     {
       "appId": "com.facebook.katana",
-      "title": "Facebook",
+      "developer": "Meta Platforms, Inc.",
       "icon": "https://play-lh.googleusercontent.com/...",
-      "developer": "Meta Platforms, Inc."
+      "store":
+      {
+        "appStore":
+          {
+            "appId":"284882215"
+          }    
+        "googlePlay":
+        {
+          "appId":"com.facebook.katana"
+        }
+      },
+      "title": "Facebook"
     },
   ]
 }
@@ -59,5 +72,6 @@ Headers:
 ## Công nghệ sử dụng
 * [Node.js 20.x](https://nodejs.org/)
 * [google-play-scraper](https://github.com/facundoolano/google-play-scraper)
-* [Vercel Serverless Functions](https://vercel.com/docs/functions/serverless-functions)
+* [app-store-scraper](https://github.com/facundoolano/app-store-scraper)
+* [Vercel](https://vercel.com/docs/functions/serverless-functions)
 
